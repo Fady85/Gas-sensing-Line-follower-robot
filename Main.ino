@@ -1,5 +1,5 @@
 
-// #include <Servo.h> 
+// #include <Servo_ESP32.h>
  
  
 // Motor A
@@ -19,7 +19,7 @@ int in5 = 19;
 int in6 = 18;
 
 // Servo arm; 
-
+// Servo_ESP32 myservo; 
 //Buzzer
 int buzzer = 23;
 
@@ -32,6 +32,10 @@ int servo = 21;
 //IR line tracking sensors 
 int R_S = 10;
 int L_S = 11;
+// flang IR
+int flang_IR = 34 ;
+
+
 
 void setup()
  
@@ -50,8 +54,9 @@ void setup()
   pinMode(buzzer, OUTPUT);
   pinMode(R_S, INPUT);
   pinMode(L_S, INPUT);
-
-  // arm.attach(21); 
+  pinMode(flang_IR, INPUT);
+  pinMode(servo, OUTPUT);
+  // myservo.attach(33);  // attaches the servo on pin 9 to the servo object
 
 }
  
@@ -112,13 +117,15 @@ delay(500);
 digitalWrite(buzzer, LOW);
 delay(500);
 }
+
+
 // void arm180(){
   
-// arm.write(180); 
+//   myservo.write(180); 
 //   }
 // void arm0(){
   
-// arm.write(0); 
+// myservo.write(0); 
 //   }
 
 void lineTrack(){
@@ -134,8 +141,19 @@ if((digitalRead(R_S) == 1)&&(digitalRead(L_S) == 1)){movment_stop();}
 
 }
   
+
+void avoid_flang(){
+
+if(digitalRead(flang_IR) == 1){
+
+
+}
+
+
+}  
 void loop()
  
 {
- lineTrack();
+
+
 }
