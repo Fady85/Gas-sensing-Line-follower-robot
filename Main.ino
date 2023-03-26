@@ -29,6 +29,10 @@ int gas = 12 ;
 //servo
 int servo = 21;
 
+//IR line tracking sensors 
+int R_S = 10;
+int L_S = 11;
+
 void setup()
  
 {
@@ -44,6 +48,8 @@ void setup()
   pinMode(in5, OUTPUT);
   pinMode(in6, OUTPUT);
   pinMode(buzzer, OUTPUT);
+  pinMode(R_S, INPUT);
+  pinMode(L_S, INPUT);
 
   // arm.attach(21); 
 
@@ -114,11 +120,22 @@ delay(500);
   
 // arm.write(0); 
 //   }
+
+void lineTrack(){
+
+if((digitalRead(R_S) == 0)&&(digitalRead(L_S) == 0)){movment_forward();} 
+
+if((digitalRead(R_S) == 1)&&(digitalRead(L_S) == 0)){movment_right();} 
+
+if((digitalRead(R_S) == 0)&&(digitalRead(L_S) == 1)){movment_left();} 
+
+if((digitalRead(R_S) == 1)&&(digitalRead(L_S) == 1)){movment_stop();} 
+
+
+}
   
 void loop()
  
 {
- buzz();
-
-
+ lineTrack();
 }
