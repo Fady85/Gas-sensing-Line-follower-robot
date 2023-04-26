@@ -1,7 +1,4 @@
 
-// #include <Servo_ESP32.h>
- 
- 
 // Motor A
  
 int enA = 5;
@@ -19,7 +16,8 @@ int in5 = 19;
 int in6 = 18;
 
 // Servo arm; 
-// Servo_ESP32 myservo; 
+
+
 //Buzzer
 int buzzer = 23;
 
@@ -35,6 +33,13 @@ int L_S = 11;
 // flang IR
 int flang_IR = 34 ;
 
+// Ultrasonic 
+int trigPin= 32;
+int echoPin= 35;
+#define SOUND_SPEED 0.034
+#define CM_TO_INCH 0.393701
+long duration;
+float distanceCm;
 
 
 void setup()
@@ -42,7 +47,8 @@ void setup()
 {
  
   // Set all the motor control pins to outputs
- 
+   Serial.begin(19200); // Starts the serial communication
+
   pinMode(enA, OUTPUT);
   pinMode(enB, OUTPUT);
   pinMode(in1, OUTPUT);
@@ -56,7 +62,8 @@ void setup()
   pinMode(L_S, INPUT);
   pinMode(flang_IR, INPUT);
   pinMode(servo, OUTPUT);
-  // myservo.attach(33);  // attaches the servo on pin 9 to the servo object
+  pinMode(trigPin, OUTPUT); // Sets the trigPin as an Output
+  pinMode(echoPin, INPUT); // Sets the echoPin as an Input
 
 }
  
@@ -119,14 +126,6 @@ delay(500);
 }
 
 
-// void arm180(){
-  
-//   myservo.write(180); 
-//   }
-// void arm0(){
-  
-// myservo.write(0); 
-//   }
 
 void lineTrack(){
 
@@ -149,11 +148,50 @@ if(digitalRead(flang_IR) == 1){
 
 }
 
+}
 
-}  
+ void ultra(){
+// Clears the trigPin
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  // Sets the trigPin on HIGH state for 10 micro seconds
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+  
+  // Reads the echoPin, returns the sound wave travel time in microseconds
+  duration = pulseIn(echoPin, HIGH);
+  
+  // Calculate the distance
+  distanceCm = duration * SOUND_SPEED/2;
+  
+    
+  // Prints the distance in the Serial Monitor
+  Serial.print("Distance (cm): ");
+  Serial.println(distanceCm);
+
+
+if (distanceCm <= 20){
+    movment_stop();
+    delay(300);
+    movment_backward();
+    delay(400);
+    movment_stop();
+    delay(300);
+
+    
+  }
+  else{
+    movment_forward(); 
+  }
+
+}
+
+
 void loop()
  
 {
 
+buzz();
 
 }
