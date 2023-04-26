@@ -1,4 +1,15 @@
 
+#include <WiFi.h>
+#include "esp_http_server.h"
+#include "Arduino.h"
+#include "fb_gfx.h"
+#include "soc/soc.h"             // disable brownout problems
+#include "soc/rtc_cntl_reg.h"    // disable brownout problems
+
+const char* ssid = "Orange";
+const char* password = "Aqazwsxedc1";
+#define PART_BOUNDARY "123456789000000000000987654321"
+
 // Motor A
  
 int enA = 5;
@@ -28,8 +39,8 @@ int gas = 12 ;
 int servo = 21;
 
 //IR line tracking sensors 
-int R_S = 10;
-int L_S = 11;
+int R_S = 36;
+int L_S = 39;
 // flang IR
 int flang_IR = 34 ;
 
@@ -43,6 +54,7 @@ float distanceCm;
 
 
 void setup(){
+  WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0); //disable brownout detector
   Serial.begin(9600); // Starts the serial communication
   //Set all the motor control pins to outputs
   pinMode(enA, OUTPUT);
@@ -60,6 +72,19 @@ void setup(){
   pinMode(servo, OUTPUT);
   pinMode(trigPin, OUTPUT); // Sets the trigPin as an Output
   pinMode(echoPin, INPUT); // Sets the echoPin as an Input
+
+
+  // Wi-Fi connection
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("");
+  Serial.println("WiFi connected");
+  
+  Serial.print("robot is Ready! Go to: http://");
+  Serial.println(WiFi.localIP());
 
 }
  
@@ -191,11 +216,11 @@ if((digitalRead(R_S) == 1)&&(digitalRead(L_S) == 1)){movment_stop();}
 
 if (distanceCm <= 20){
     movment_stop();
-    delay(300);
-    movment_backward();
-    delay(400);
-    movment_stop();
-    delay(300);
+    // delay(300);
+    // movment_backward();
+    // delay(400);
+    // movment_stop();
+    // delay(300);
 
     
   }
@@ -207,7 +232,6 @@ if (distanceCm <= 20){
 
 
 void loop(){
-  movment_forward();
 
 
 }
