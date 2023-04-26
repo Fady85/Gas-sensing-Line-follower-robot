@@ -42,13 +42,9 @@ long duration;
 float distanceCm;
 
 
-void setup()
- 
-{
- 
-  // Set all the motor control pins to outputs
-   Serial.begin(19200); // Starts the serial communication
-
+void setup(){
+  Serial.begin(9600); // Starts the serial communication
+  //Set all the motor control pins to outputs
   pinMode(enA, OUTPUT);
   pinMode(enB, OUTPUT);
   pinMode(in1, OUTPUT);
@@ -58,8 +54,8 @@ void setup()
   pinMode(in5, OUTPUT);
   pinMode(in6, OUTPUT);
   pinMode(buzzer, OUTPUT);
-  pinMode(R_S, INPUT);
-  pinMode(L_S, INPUT);
+  // pinMode(R_S, INPUT);
+  // pinMode(L_S, INPUT);
   pinMode(flang_IR, INPUT);
   pinMode(servo, OUTPUT);
   pinMode(trigPin, OUTPUT); // Sets the trigPin as an Output
@@ -68,8 +64,9 @@ void setup()
 }
  
 
-
 void movment_stop(){
+  analogWrite(enA, 0);
+  analogWrite(enB, 0);
   digitalWrite(in1, LOW);
   digitalWrite(in2, LOW);  
   digitalWrite(in3, LOW);
@@ -78,51 +75,72 @@ void movment_stop(){
 
 
 void movment_forward(){
+  analogWrite(enA, 200);
+  analogWrite(enB, 200);
   digitalWrite(in1, HIGH);
   digitalWrite(in2, LOW);  
   digitalWrite(in3, HIGH);
   digitalWrite(in4, LOW);
+  Serial.println("Robot is moving forward");  // printlns a label
+  Serial.println("\t");         // printlns a tab
   }
 
 void movment_backward(){
+  analogWrite(enA, 200);
+  analogWrite(enB, 200);
   digitalWrite(in1, LOW);
   digitalWrite(in2, HIGH);  
   digitalWrite(in3, LOW);
   digitalWrite(in4, HIGH);
+  Serial.println("Robot is moving backward");  // printlns a label
+  Serial.println("\t");         // printlns a tab
   }
 
 
 void movment_left(){
+  analogWrite(enA, 200);
+  analogWrite(enB, 200);
   digitalWrite(in1, HIGH);
   digitalWrite(in2, LOW);  
   digitalWrite(in3, LOW);
   digitalWrite(in4, HIGH);
+  Serial.println("Robot is moving left");  // printlns a label
+  Serial.println("\t");         // printlns a tab
   }
 
 
 void movment_right(){
+  analogWrite(enA, 200);
+  analogWrite(enB, 200);
   digitalWrite(in1, LOW);
   digitalWrite(in2, HIGH);  
   digitalWrite(in3, HIGH);
   digitalWrite(in4, LOW);
+  Serial.println("Robot is moving right");  // printlns a label
+  Serial.println("\t");         // printlns a tab
   }
 
 
 void scissor_lift_down(){
   digitalWrite(in5, LOW);
-  digitalWrite(in6, HIGH);  
+  digitalWrite(in6, HIGH); 
+  Serial.println("Scissor moving down");  // printlns a label
+  Serial.println("\t");         // printlns a tab 
   }
 
 void scissor_lift_up(){
   digitalWrite(in5, HIGH);
   digitalWrite(in6, LOW);  
+  Serial.println("Scissor moving up");  // printlns a label
+  Serial.println("\t");         // printlns a tab 
   }
 
 void buzz(){
-digitalWrite(buzzer, HIGH);
-delay(500);
-digitalWrite(buzzer, LOW);
-delay(500);
+
+  tone(buzzer, 1000); // Send 1KHz sound signal...
+  delay(1000);        // ...for 1 sec
+  noTone(buzzer);     // Stop sound...
+  delay(1000);        // ...for 1sec
 }
 
 
@@ -141,14 +159,14 @@ if((digitalRead(R_S) == 1)&&(digitalRead(L_S) == 1)){movment_stop();}
 }
   
 
-void avoid_flang(){
+// void avoid_flang(){
 
-if(digitalRead(flang_IR) == 1){
+// if(digitalRead(flang_IR) == 1){
 
 
-}
+// }
 
-}
+// }
 
  void ultra(){
 // Clears the trigPin
@@ -166,8 +184,8 @@ if(digitalRead(flang_IR) == 1){
   distanceCm = duration * SOUND_SPEED/2;
   
     
-  // Prints the distance in the Serial Monitor
-  Serial.print("Distance (cm): ");
+  // printlns the distance in the Serial Monitor
+  Serial.println("Distance (cm): ");
   Serial.println(distanceCm);
 
 
@@ -188,10 +206,8 @@ if (distanceCm <= 20){
 }
 
 
-void loop()
- 
-{
+void loop(){
+  movment_forward();
 
-buzz();
 
 }
