@@ -1,15 +1,4 @@
 
-#include <WiFi.h>
-#include "esp_http_server.h"
-#include "Arduino.h"
-#include "fb_gfx.h"
-#include "soc/soc.h"             // disable brownout problems
-#include "soc/rtc_cntl_reg.h"    // disable brownout problems
-
-const char* ssid = "Orange";
-const char* password = "Aqazwsxedc1";
-#define PART_BOUNDARY "123456789000000000000987654321"
-
 // Motor A
  
 int enA = 5;
@@ -54,9 +43,7 @@ float distanceCm;
 
 
 void setup(){
-  WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0); //disable brownout detector
   Serial.begin(9600); // Starts the serial communication
-  //Set all the motor control pins to outputs
   pinMode(enA, OUTPUT);
   pinMode(enB, OUTPUT);
   pinMode(in1, OUTPUT);
@@ -66,25 +53,11 @@ void setup(){
   pinMode(in5, OUTPUT);
   pinMode(in6, OUTPUT);
   pinMode(buzzer, OUTPUT);
-  // pinMode(R_S, INPUT);
-  // pinMode(L_S, INPUT);
+
   pinMode(flang_IR, INPUT);
   pinMode(servo, OUTPUT);
   pinMode(trigPin, OUTPUT); // Sets the trigPin as an Output
   pinMode(echoPin, INPUT); // Sets the echoPin as an Input
-
-
-  // Wi-Fi connection
-  WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
-  }
-  Serial.println("");
-  Serial.println("WiFi connected");
-  
-  Serial.print("robot is Ready! Go to: http://");
-  Serial.println(WiFi.localIP());
 
 }
  
@@ -232,6 +205,6 @@ if (distanceCm <= 20){
 
 
 void loop(){
-
+ultra();
 
 }
